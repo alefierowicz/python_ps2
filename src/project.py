@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from datetime import date
 from pathlib import Path
 
-from task import Task
+from task import Task, check_date
 
 SORT_KEYS = {
     "deadline": lambda t: (t.due_date is None, t.due_date or ""),
@@ -21,9 +21,12 @@ class Project:
 
     def add_task(self, task: Task) -> None:
         self.tasks.append(task)
+        task.on_date(self.current_date)
 
     def set_date(self, new_date: str) -> None:
-        self.current_date = new_date
+        self.current_date = check_date(new_date)
+        for task in self.tasks:
+            task.on_date(self.current_date)
 
     def _find(self, title: str) -> Task:
         return next(t for t in self.tasks if t.title == title)

@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> None:
         parser.error(f"brak {args.file}, zacznij od: todo init NAZWA")
     except StopIteration:
         parser.error(f"brak zadania: {args.title}")
-    except TypeError as e:
+    except (TypeError, ValueError) as e:
         # np. brak --priority dla priority task
         parser.error(str(e))
 

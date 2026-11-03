@@ -1,11 +1,19 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Any, ClassVar
 
 from serializable import Serializable
 
 STATUSES = ("pending", "in progress", "done")
 STATUS_LABELS = {"pending": "oczekujące", "in progress": "w realizacji", "done": "zrobione"}
+
+
+def check_date(value: str) -> str:
+    # tylko yyyy-mm-dd, bo daty porownujemy jako stringi
+    if date.fromisoformat(value).isoformat() != value:
+        raise ValueError(f"Invalid date: {value!r} (expected yyyy-mm-dd)")
+    return value
 
 
 class Task(Serializable):
@@ -17,12 +25,13 @@ class Task(Serializable):
         Task.registry[cls.__name__] = cls
 
     def __init__(self, title: str, description: str = "", status: str = "pending") -> None:
+        if status not in STATUSES:
+            raise ValueError(f"Invalid status: {status!r}")
         self.title = title
         self.description = description
         self.status = status
 
     def next_status(self) -> None:
-        # done zostaje done
         i = STATUSES.index(self.status)
         self.status = STATUSES[min(i + 1, len(STATUSES) - 1)]
 
@@ -32,6 +41,9 @@ class Task(Serializable):
 
     def score(self) -> int:
         return 0
+
+    def on_date(self, today: str) -> None:
+        pass
 
     def _details(self) -> list[str]:
         return []
@@ -52,7 +64,9 @@ class Task(Serializable):
             return NotImplemented
         return self.to_dict() == other.to_dict()
 
-    def __lt__(self, other: Task) -> bool:
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Task):
+            return NotImplemented
         # status, scoring malejaco, termin (brak na koniec), tytul
         def key(t: Task) -> tuple:
             return (STATUSES.index(t.status), -t.score(), t.due_date is None, t.due_date or "", t.title)

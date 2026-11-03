@@ -10,6 +10,15 @@
         "status": "done",
         "deadline": "2026-11-30"
       }
+    },
+    {
+      "task_type": "PriorityTask",
+      "kwargs": {
+        "title": "meowl",
+        "description": "meowmeow",
+        "status": "done",
+        "priority": "HIGH"
+      }
     }
   ]
 }
