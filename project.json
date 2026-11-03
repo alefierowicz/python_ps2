@@ -1,0 +1,15 @@
+{
+  "name": "zajencia",
+  "current_date": "2026-10-11",
+  "tasks": [
+    {
+      "task_type": "RegularTask",
+      "kwargs": {
+        "title": "prezentacja",
+        "description": "",
+        "status": "done",
+        "deadline": "2026-11-30"
+      }
+    }
+  ]
+}

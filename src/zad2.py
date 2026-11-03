@@ -1,16 +1,4 @@
-from ps_2 import (
-    STATUSES,
-    Priority,
-    PriorityTask,
-    Project,
-    RecurringTask,
-    RegularTask,
-    Serializable,
-    Task,
-    create_task,
-)
-
-__all__ = [
-    "STATUSES", "Priority", "PriorityTask", "Project", "RecurringTask",
-    "RegularTask", "Serializable", "Task", "create_task",
-]
+from project import Project
+from task import Task
+# import rejestruje podklasy w Task.registry
+from task_types import PriorityTask, RecurringTask, RegularTask
